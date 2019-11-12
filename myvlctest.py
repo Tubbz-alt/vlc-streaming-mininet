@@ -285,7 +285,7 @@ def vlcTest():
     print "Testing network connectivity"
     net.pingAll()
 
-    # CLI(net) # starts the mininet command line prompt
+    CLI(net) # starts the mininet command line prompt
 
     vlcStream(net)
     net.stop()

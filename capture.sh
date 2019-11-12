@@ -5,4 +5,4 @@
 rm $1
 touch $1
 chmod a+w $1
-sudo tshark -i $3 -a duration:$2 -w $1 2> /dev/null &
+tshark -i $3 -a duration:$2 -w $1 2> /dev/null &
