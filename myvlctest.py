@@ -185,7 +185,7 @@ def initiateCapture(h):
         interface_name = 'h%d-eth0'%(2*i)
 
         # Den testing
-        h[2*i].cmd(f'ifconfig &> /tmp/ifconfig_h{2*i}.log &')
+        h[2*i].cmd('ifconfig &> /tmp/ifconfig_h%d.log &'%(2*i))
 
         command = 'bash %s %s %d %s'%(capture_script, outFile, capture_time, interface_name)
         h[2*i].cmd(command) # doesnt wait for the command to finish, if it is a blocking command
