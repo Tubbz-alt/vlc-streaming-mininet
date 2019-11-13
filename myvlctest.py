@@ -110,10 +110,10 @@ def stream(src, dst, input_filename, output_filename, dstIP):
         std{access=file,mux=mp4,dst=%s}" \
         --run-time %d vlc://quit &'%(output_filename, local_stream_time)
     result2 = dst.sendCmd(client_command)
-    # print client_command
-    # result2 = dst.cmd('sleep 5')
+    print client_command
+    result2 = dst.cmd('sleep 5')
 
-    # time.sleep(5)
+    time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
     server_command = 'cvlc -vvv %s --sout \
@@ -121,9 +121,9 @@ def stream(src, dst, input_filename, output_filename, dstIP):
         duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
          --run-time %d vlc://quit'%(input_filename, dstIP, local_stream_time)
     result1 = src.sendCmd(server_command)
-    # print server_command
+    print server_command
 
-    # print result1
+    print result1
 
     return (src, dst)
 
