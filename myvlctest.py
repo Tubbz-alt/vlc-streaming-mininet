@@ -111,7 +111,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
         --run-time %d vlc://quit &'%(output_filename, local_stream_time)
     result2 = dst.sendCmd(client_command)
     print client_command
-    result2 = dst.sendCmd('sleep 5')
+    # result2 = dst.cmd('sleep 5')
 
     time.sleep(5)
 
