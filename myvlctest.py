@@ -105,7 +105,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
 
     # src, dst are host objects obtained from net.get('<host>')
     print 'Executing command on client %s <- %s'%(dst.name, src.name)
-    client_command = 'cvlc rtp://@:5004 --sout \
+    client_command = 'vlc-wrapper rtp://@:5004 --sout \
         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         std{access=file,mux=mp4,dst=%s}" \
         --run-time %d vlc://quit &'%(output_filename, local_stream_time)
@@ -116,7 +116,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
     time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
-    server_command = 'cvlc -vvv %s --sout \
+    server_command = 'vlc-wrapper -vvv %s --sout \
         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
          --run-time %d vlc://quit'%(input_filename, dstIP, local_stream_time)
