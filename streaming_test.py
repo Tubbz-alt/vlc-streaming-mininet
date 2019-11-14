@@ -107,9 +107,9 @@ class SimpleTopo(Topo):
         for i in range(n+1)[1:]:
             h.append(self.addHost('h{0}'.format(i)))
             if (i%2)==1:
-                self.addLink(h[i], s1, bw=bw)
+                self.addLink(h[i], s1, bw=experiment_configuration.bw)
             else:
-                self.addLink(h[i], s2, bw=bw)
+                self.addLink(h[i], s2, bw=experiment_configuration.bw)
 
         self.addLink(s1, s2, bw=experiment_configuration.bw, loss=experiment_configuration.loss)
 
