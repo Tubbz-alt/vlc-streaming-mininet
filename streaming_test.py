@@ -48,7 +48,8 @@ loss_options = [0] # link loss in percentage
 protocol_options = ['rtp']
 #codec_options = ['h264', 'mpeg2', 'mpeg5', 'vp80']
 codec_options = ['h264']
-mode_options = ['seq', 'par'] # sequential or parallel
+# mode_options = ['seq', 'par'] # sequential or parallel
+mode_options = ['seq'] # sequential or parallel
 
 ## Paths
 
@@ -211,6 +212,7 @@ def stream(src, dst, input_filename, output_filename, experiment_configuration):
     # print client_command
     
     time.sleep(5)
+    print dst.IP()
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
     server_command = get_src_vlc_command(input_filename, local_stream_time, dst.IP(), experiment_configuration)
