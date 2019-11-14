@@ -288,7 +288,7 @@ def vlc_stream(net, experiment_configuration):
         stream_videos_in_sequence(net, host_pairs, input_filepaths, output_filepaths, experiment_configuration)
     elif experiment_configuration.mode == 'par':
         stream_videos_in_parallel(net, host_pairs, input_filepaths, output_filepaths, experiment_configuration)
-    else
+    else:
         raise ValueError('> mode not expected in experiment_configuration at vlc_stream! <')
 
 def run_experiment(experiment_configuration):
