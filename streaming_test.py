@@ -211,7 +211,7 @@ def stream(src, dst, input_filename, output_filename, experiment_configuration):
     time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
-    server_command = get_src_vlc_command(input_filename, dst.IP(), local_stream_time)
+    server_command = get_src_vlc_command(input_filename, local_stream_time, dst.IP(), experiment_configuration)
     server_result = src.sendCmd(server_command)
     # print server_command
 
