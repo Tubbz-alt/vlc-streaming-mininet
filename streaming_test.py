@@ -55,7 +55,7 @@ mode_options = ['seq'] # sequential or parallel
 
 workingDir = os.getcwd()
 
-capture_script = join(workingDir, 'streaming_capture.sh')  # '/home/sumanth/mininetDir/capture.sh'
+capture_script = join(workingDir, 'trace.sh')  # '/home/sumanth/mininetDir/capture.sh'
 
 sd_flow_filepath = join(workingDir, 'testVideos/360x240_2mb.mp4') #'/home/sumanth/sample/360x240_2mb.mp4'
 hd_flow_filepath = join(workingDir, 'testVideos/720x480_5mb.mp4') #'/home/sumanth/sample/720x480_5mb.mp4'
