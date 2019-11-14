@@ -214,7 +214,7 @@ def stream(src, dst, input_filename, output_filename, experiment_configuration):
     time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
-    server_command = get_src_vlc_command(input_filename, dst.IP, local_stream_time)
+    server_command = get_src_vlc_command(input_filename, dst.IP(), local_stream_time)
     server_result = src.sendCmd(server_command)
     # print server_command
 
@@ -272,7 +272,7 @@ def stream_videos_in_parallel(net, host_pairs, input_filepaths, output_filepaths
 def vlc_stream(net, experiment_configuration):
 
     host_pairs = get_host_pairs(net)
-    input_filepaths = get_input_filepaths(host_pairs, experiment_configuration)
+    input_filepaths = get_input_filepaths(host_pairs)
     output_filepaths = get_output_filepaths(host_pairs, input_filepaths, experiment_configuration)
 
     if experiment_configuration.mode == 'seq':
@@ -296,12 +296,12 @@ def run_experiment(experiment_configuration):
     print "Testing network connectivity"
     net.pingAll()
 
-    CLI(net) # starts the mininet command line prompt
+    # CLI(net) # starts the mininet command line prompt
 
     print 'Streaming the video via VLC'
     vlc_stream(net, experiment_configuration)
 
-    CLI(net) # starts the mininet command line prompt
+    # CLI(net) # starts the mininet command line prompt
 
     print 'Stopping the network'
     net.stop()
