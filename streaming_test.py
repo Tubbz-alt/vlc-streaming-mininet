@@ -195,7 +195,7 @@ def get_host_pairs(net):
     
     host_pairs = [] # list of tuples
     for i in range((n/2)+1)[1:]:
-        host_pairs.append(h[2*i-1],h[2*i])
+        host_pairs.append((h[2*i-1],h[2*i]))
 
     return host_pairs
 
@@ -214,7 +214,7 @@ def stream(src, dst, input_filename, output_filename, experiment_configuration):
     time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
-    server_command = get_src_vlc_command(input_filename, dstIP, local_stream_time)
+    server_command = get_src_vlc_command(input_filename, dst.IP, local_stream_time)
     server_result = src.sendCmd(server_command)
     # print server_command
 
