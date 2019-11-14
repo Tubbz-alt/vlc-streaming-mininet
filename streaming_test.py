@@ -19,22 +19,17 @@ The below global variables need to be set according to the experiment
 
 '''
 
-import sys
 import time
-from threading import Thread
 
 from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.node import CPULimitedHost
 from mininet.link import TCLink
-from mininet.util import dumpNodeConnections
-from mininet.log import setLogLevel
 from mininet.cli import CLI
 
 from functools import partial
 from mininet.node import RemoteController
-import subprocess
-from os.path import isfile, join
+from os.path import join
 import os
 
 '''
@@ -177,6 +172,8 @@ def get_output_filepaths(host_pairs, input_filepaths, experiment_configuration):
             + '.mp4'
         
         output_filepaths.append(join(savedStreamsDir, output_file))
+
+    return output_filepaths
 
 def get_hosts(net):
 
