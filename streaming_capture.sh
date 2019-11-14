@@ -6,4 +6,4 @@
 rm $1$2
 touch $1$2
 chmod a+w $1$2
-sudo tshark -i $4 -a duration:$3 -w $1/$2 1> /tmp/streaming_test/$2_$4_output.log 2> /tmp/streaming_test/$2_$4_errors.log &
+sudo tshark -i $4 -a duration:$3 -w $1/$2_$4.pcap 1> /tmp/$2_$4_output.log 2> /tmp/$2_$4_errors.log &
