@@ -237,7 +237,7 @@ def initiateCapture(h, output_filepath):
 
 def stream_videos_in_sequence(net, host_pairs, input_filepaths, output_filepaths, experiment_configuration):
     
-    for index in len(host_pairs):
+    for index in range(0,len(host_pairs)):
         host_src = host_pairs[index][0]
         host_dst = host_pairs[index][1]
 
