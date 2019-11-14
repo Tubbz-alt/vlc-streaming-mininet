@@ -294,7 +294,7 @@ def vlc_stream(net, experiment_configuration):
 def run_experiment(experiment_configuration):
 
     print 'Creating network and running simple performance test'
-    topo = SimpleTopo(experiment_configuration)
+    topo = SimpleTopo(experiment_configuration=experiment_configuration)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, 
         controller=partial(RemoteController, ip='127.0.0.1', port=6633))
 
