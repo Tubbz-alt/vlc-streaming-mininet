@@ -95,15 +95,6 @@ class SimpleTopo(Topo):
         if not experiment_configuration:
             raise ValueError('> experiment_configuration must be informed to SimpleTopo! <')
 
-        bw = experiment_configuration.get('bw')
-        loss = experiment_configuration.get('loss')
-
-        if not bw:
-            raise ValueError('> bw must be informed to SimpleTopo! <')
-        
-        if not loss:
-            raise ValueError('> loss must be informed to SimpleTopo! <')
-
         # Adding switches
         s1 = self.addSwitch('s1')
         s2 = self.addSwitch('s2')
@@ -120,7 +111,7 @@ class SimpleTopo(Topo):
             else:
                 self.addLink(h[i], s2, bw=bw)
 
-        self.addLink(s1, s2, bw=bw, loss=loss)
+        self.addLink(s1, s2, bw=experiment_configuration.bw, loss=experiment_configuration.loss)
 
 
 ## Auxiliary functions
