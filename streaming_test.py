@@ -321,8 +321,8 @@ def start_all_experiments():
                             mode=experiment_mode,
                             iteration=1)
                     
-                    print 'Running experiment ' + str(experiment_configuration)
-                    run_experiment(experiment_configuration)
+                        print 'Running experiment ' + str(experiment_configuration)
+                        run_experiment(experiment_configuration)
 
 if __name__=='__main__':
 
