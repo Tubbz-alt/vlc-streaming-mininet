@@ -222,7 +222,8 @@ def initiateCapture(h, output_filepath):
     '''
 
     output_filename_without_extension = output_filepath.split('/')[-1].split('.')[0]
-
+    interface_name = h.defaultIntf()
+    
     command = 'bash %s %s %s %d %s'%(
         capture_script, 
         capturedTracesDir, 
