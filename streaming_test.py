@@ -40,7 +40,7 @@ n = 4 # number of hosts
 
 ## Experiment variables
 
-#bw_options = [10.0, 3.0, 1.0] # link bandwidth in mbps (all links have the same bandwidth)
+#bw_options = [100.0, 10.0, 1.0] # link bandwidth in mbps (all links have the same bandwidth)
 bw_options = [10.0] # link bandwidth in mbps (all links have the same bandwidth)
 # loss_options = [0, 30, 70] # link loss in percentage
 loss_options = [0] # link loss in percentage
