@@ -280,7 +280,7 @@ def vlcTest():
     controller=partial(RemoteController, ip='127.0.0.1', port=6633))
 
     net.start()
-    applyQueues()
+#    applyQueues()
 
     print "Testing network connectivity"
     net.pingAll()
