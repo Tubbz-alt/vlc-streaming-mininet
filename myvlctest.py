@@ -97,7 +97,7 @@ class SimpleTopo(Topo):
             else:
                 self.addLink(h[i], s2)
 
-        self.addLink(s1, s2)
+        self.addLink(s1, s2, bw=100, loss=0)
 
 def stream(src, dst, input_filename, output_filename, dstIP):
     global stream_time
@@ -105,7 +105,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
 
     # src, dst are host objects obtained from net.get('<host>')
     print 'Executing command on client %s <- %s'%(dst.name, src.name)    
-    client_command = 'vlc-wrapper rtp://@:5004 --sout \
+    client_command = 'cvlc rtp://@:5004 --sout \
         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         std{access=file,mux=mp4,dst=%s}" \
         --run-time %d vlc://quit &'%(output_filename, local_stream_time)
@@ -116,7 +116,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
     time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
-    server_command = 'vlc-wrapper -vvv %s --sout \
+    server_command = 'cvlc -vvv %s --sout \
         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
          --run-time %d vlc://quit'%(input_filename, dstIP, local_stream_time)
@@ -240,31 +240,31 @@ def vlcStream(net):
 
 
 
-def applyQueues():
-    '''
-    create queues for QoS
-    '''
+# def applyQueues():
+#     '''
+#     create queues for QoS
+#     '''
 
-    if not qos:
-        print 'No QoS !'
-        command = 'sudo ovs-vsctl set port s1-eth%d qos=@newqos -- \
-            --id=@newqos create qos type=linux-htb other-config:max-rate=1000000000 queues:0=@q0 -- \
-            --id=@q0 create Queue other-config:min-rate=%d other-config:max-rate=%d'%((n/2)+1, int(bw*(10**6)), int(bw*(10**6)))
+#     if not qos:
+#         print 'No QoS !'
+#         command = 'sudo ovs-vsctl set port s1-eth%d qos=@newqos -- \
+#             --id=@newqos create qos type=linux-htb other-config:max-rate=1000000000 queues:0=@q0 -- \
+#             --id=@q0 create Queue other-config:min-rate=%d other-config:max-rate=%d'%((n/2)+1, int(bw*(10**6)), int(bw*(10**6)))
 
-        subprocess.call(command, shell=True)
-    else:
-        print 'Yes QoS !!!'
-        command = 'ovs-vsctl -- set Port s1-eth%d qos=@newqos -- \
-        --id=@newqos create QoS type=linux-htb other-config:max-rate=1000000000 queues=0=@q0,1=@q1,2=@q2 -- \
-        --id=@q0 create Queue other-config:min-rate=%d other-config:max-rate=%d -- \
-        --id=@q1 create Queue other-config:min-rate=%d other-config:max-rate=%d -- \
-        --id=@q2 create Queue other-config:min-rate=%d other-config:max-rate=%d'%(
-        (n/2)+1, 
-        int(bw*(10**6)), int(bw*(10**6)),
-        int((bw*(10**6))/(qos_k+1)), int((bw*(10**6))/(qos_k+1)), 
-        int(((bw*(10**6))/(qos_k+1))*qos_k), int(((bw*(10**6))/(qos_k+1))*qos_k) )
+#         subprocess.call(command, shell=True)
+#     else:
+#         print 'Yes QoS !!!'
+#         command = 'ovs-vsctl -- set Port s1-eth%d qos=@newqos -- \
+#         --id=@newqos create QoS type=linux-htb other-config:max-rate=1000000000 queues=0=@q0,1=@q1,2=@q2 -- \
+#         --id=@q0 create Queue other-config:min-rate=%d other-config:max-rate=%d -- \
+#         --id=@q1 create Queue other-config:min-rate=%d other-config:max-rate=%d -- \
+#         --id=@q2 create Queue other-config:min-rate=%d other-config:max-rate=%d'%(
+#         (n/2)+1, 
+#         int(bw*(10**6)), int(bw*(10**6)),
+#         int((bw*(10**6))/(qos_k+1)), int((bw*(10**6))/(qos_k+1)), 
+#         int(((bw*(10**6))/(qos_k+1))*qos_k), int(((bw*(10**6))/(qos_k+1))*qos_k) )
 
-        subprocess.call(command, shell=True)
+#         subprocess.call(command, shell=True)
 
 
 
