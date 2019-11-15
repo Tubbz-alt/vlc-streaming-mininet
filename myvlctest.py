@@ -104,7 +104,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
     local_stream_time = stream_time * (n/2)
 
     # src, dst are host objects obtained from net.get('<host>')
-    print 'Executing command on client %s <- %s'%(dst.name, src.name)
+    print 'Executing command on client %s <- %s'%(dst.name, src.name)    
     client_command = 'vlc-wrapper rtp://@:5004 --sout \
         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         std{access=file,mux=mp4,dst=%s}" \
@@ -131,31 +131,31 @@ def stream(src, dst, input_filename, output_filename, dstIP):
 
 
 
-def vlcStream_working(net):
-    # sample testing method to send a vlc video stream from host h1 to h2
+# def vlcStream_working(net):
+#     # sample testing method to send a vlc video stream from host h1 to h2
 
-    h1, h2 = net.get('h1', 'h2')
+#     h1, h2 = net.get('h1', 'h2')
 
-    print 'Executing command on h2'
-    result2 = h2.cmd('cvlc rtp://@:5004 --sout \
-        "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:std{access=file,mux=mp4,dst=output.mp4}" \
-        --run-time 40 vlc://quit &')
-    # result2 = h2.cmd('sleep 5')
+#     print 'Executing command on h2'
+#     result2 = h2.cmd('cvlc rtp://@:5004 --sout \
+#         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:std{access=file,mux=mp4,dst=output.mp4}" \
+#         --run-time 40 vlc://quit &')
+#     # result2 = h2.cmd('sleep 5')
 
-    # time.sleep(5)
+#     # time.sleep(5)
 
-    print 'Executing command on h1'
-    result1 = h1.cmd('cvlc -vvv test.mp4 --sout \
-        "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:duplicate{dst=rtp{dst=10.0.0.2,port=5004,mux=ts}}" \
-        --run-time 40 vlc://quit ')
-    # result1 = h1.cmd('sleep 5')
+#     print 'Executing command on h1'
+#     result1 = h1.cmd('cvlc -vvv test.mp4 --sout \
+#         "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:duplicate{dst=rtp{dst=10.0.0.2,port=5004,mux=ts}}" \
+#         --run-time 40 vlc://quit ')
+#     # result1 = h1.cmd('sleep 5')
 
-    # result1wo = h1.waitOutput()
+#     # result1wo = h1.waitOutput()
 
 
-    print result1
-    print result2
-    print 'commands on h1, h2 done FINISHED'
+#     print result1
+#     print result2
+#     print 'commands on h1, h2 done FINISHED'
 
 def initiateCapture(h):
     '''
