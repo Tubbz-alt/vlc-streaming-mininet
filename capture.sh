@@ -5,4 +5,4 @@
 rm $1
 touch $1
 chmod a+w $1
-sudo tshark -i $3 -a duration:$2 -w $1 1> /tmp/myvlctest_output.log 2> /tmp/myvlctest_errors.log &
+sudo tshark -i $3 -a duration:$2 -w $1 1> /tmp/myvlctest_$3_output.log 2> /tmp/myvlctest_$3_errors.log &
