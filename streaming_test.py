@@ -125,24 +125,28 @@ class SimpleTopo(Topo):
 ## Auxiliary functions
 
 def get_dst_vlc_command(output_filename, local_stream_time, experiment_configuration):
+    output_filename_only = get_filename_without_extension(output_filename)
+
     if experiment_configuration.protocol == 'rtp':
         if experiment_configuration.codec == 'h264':
             return 'cvlc rtp://@:5004 --sout \
                 "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
                 std{access=file,mux=mp4,dst=%s}" \
-                --run-time %d vlc://quit 2> /tmp/stream-client-%s_errors.log 1> /tmp/stream-client-%s_output.log &'%(output_filename, local_stream_time, get_filename_without_extension(output_filename), get_filename_without_extension(output_filename))
+                --run-time %d vlc://quit 2> /tmp/stream-client-%s_errors.log 1> /tmp/stream-client-%s_output.log &'%(output_filename, local_stream_time, output_filename_only, output_filename_only)
         
         raise ValueError('> codec not recognized in get_dst_vlc_command! <')
     
     raise ValueError('> protocol not recognized in get_dst_vlc_command! <')
 
 def get_src_vlc_command(input_filename, local_stream_time, dstIP, experiment_configuration):
+    description = experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename))
+    
     if experiment_configuration.protocol == 'rtp':
         if experiment_configuration.codec == 'h264':
             return 'cvlc -vvv %s --sout \
                 #transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
                 duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
-                --run-time %d vlc://quit 2> /tmp/stream-server-%s_errors.log 1> /tmp/stream-server-%s_output.log'%(input_filename, dstIP, local_stream_time, experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename)), experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename)))
+                --run-time %d vlc://quit 2> /tmp/stream-server-%s_errors.log 1> /tmp/stream-server-%s_output.log'%(input_filename, dstIP, local_stream_time, description, description)
         
         raise ValueError('> codec not recognized in get_src_vlc_command! <')
     
