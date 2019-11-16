@@ -1,0 +1,7 @@
+tshark: Lua: Error during loading:
+ [string "/usr/share/wireshark/init.lua"]:46: dofile has been disabled due to running Wireshark as superuser. See http://wiki.wireshark.org/CaptureSetup/CapturePrivileges for help in running Wireshark as an unprivileged user.
+Running as user "root" and group "root". This could be dangerous.
+Capturing on 'h4-eth0'
+50 92 125 162 195 236 264 304 352 373 408 439 462 494 542 574 628 645 658 680 697 717 729 745 773 800 813 837 851 882 912 949 973 989 1017 1050 1080 1113 1160 1177 1199 1285 1298 1314 1327 1378 1392 1410 1421 1459 1478 1528 1562 1644 1677 1711 1715 1736 tshark: The network adapter on which the capture was being done is no longer running; the capture has stopped.
+
+
