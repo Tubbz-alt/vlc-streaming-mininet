@@ -79,7 +79,7 @@ class ExperimentConfiguration():
     def __str__(self):
         return str(self.__dict__)
     
-    def get_description(self, preffix, suffix):
+    def get_description(self, preffix='', suffix=''):
         return (preffix + '_') if preffix else '' \
             + '%d-mb-link'%bw \
             + '_%d-loss'%loss \
