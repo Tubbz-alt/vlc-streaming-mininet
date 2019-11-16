@@ -48,8 +48,8 @@ loss_options = [0] # link loss in percentage
 protocol_options = ['rtp']
 #codec_options = ['h264', 'mpeg2', 'theora-ogg', 'vp80']
 codec_options = ['h264']
-# mode_options = ['seq', 'par'] # sequential or parallel
-mode_options = ['seq'] # sequential or parallel
+mode_options = ['seq', 'par'] # sequential or parallel
+# mode_options = ['seq'] # sequential or parallel
 
 ## Paths
 
