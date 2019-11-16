@@ -78,6 +78,16 @@ class ExperimentConfiguration():
     
     def __str__(self):
         return str(self.__dict__)
+    
+    def get_description(self, preffix, suffix):
+        return (preffix + '_') if preffix else '' \
+            + '%d-mb-link'%bw \
+            + '_%d-loss'%loss \
+            + '_%s-protocol'%protocol \
+            + '_%s-codec'%codec \
+            + '_%s-mode'%mode \
+            + '_%s-iteration'%iteration \
+            + ('_' + suffix) if suffix else ''
 
 
 ## Topology class
@@ -117,10 +127,10 @@ class SimpleTopo(Topo):
 def get_dst_vlc_command(output_filename, local_stream_time, experiment_configuration):
     if experiment_configuration.protocol == 'rtp':
         if experiment_configuration.codec == 'h264':
-            return 'vlc-wrapper rtp://@:5004 --sout \
+            return 'cvlc rtp://@:5004 --sout \
                 "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
                 std{access=file,mux=mp4,dst=%s}" \
-                --run-time %d vlc://quit &'%(output_filename, local_stream_time)
+                --run-time %d vlc://quit 2> /tmp/stream-client-%s_errors.log 1> /tmp/stream-client-%s_output.log &'%(get_filename_without_extension(output_filename), local_stream_time)
         
         raise ValueError('> codec not recognized in get_dst_vlc_command! <')
     
@@ -129,10 +139,10 @@ def get_dst_vlc_command(output_filename, local_stream_time, experiment_configura
 def get_src_vlc_command(input_filename, local_stream_time, dstIP, experiment_configuration):
     if experiment_configuration.protocol == 'rtp':
         if experiment_configuration.codec == 'h264':
-            return 'vlc-wrapper -vvv %s --sout \
+            return 'cvlc -vvv %s --sout \
                 #transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
                 duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
-                --run-time %d vlc://quit'%(input_filename, dstIP, local_stream_time)
+                --run-time %d vlc://quit 2> /tmp/stream-server-%s_errors.log 1> /tmp/stream-server-%s_output.log'%(experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename)), dstIP, local_stream_time)
         
         raise ValueError('> codec not recognized in get_src_vlc_command! <')
     
@@ -140,6 +150,12 @@ def get_src_vlc_command(input_filename, local_stream_time, dstIP, experiment_con
 
 def get_capture_time():
     return stream_time + (n-2)*(stream_time/2)
+
+def get_filename(filepath):
+    return filepath.split('/')[-1]
+
+def get_filename_without_extension(filepath):
+    return '.'.join(get_filename(filepath).split('.')[:-1])
 
 def get_input_filepaths(host_pairs):
     
@@ -162,16 +178,10 @@ def get_output_filepaths(host_pairs, input_filepaths, experiment_configuration):
         host_dst = host_pairs[index][1]
 
         input_filepath = input_filepaths[index]
-        output_file = input_filepath.split('/')[-1]   # gets the actual file name, from the full path name
-        output_file = output_file.split('.')[0] \
-            + '_%d-mb-link'%experiment_configuration.bw \
-            + '_%d-loss'%experiment_configuration.loss \
+        output_file = get_filename_without_extension(input_filepath) \
             + '_%s-to-%s'%(host_src.name, host_dst.name) \
             + '_%d-hosts'%n \
-            + '_%s-protocol'%experiment_configuration.protocol \
-            + '_%s-codec'%experiment_configuration.codec \
-            + '_%s-mode'%experiment_configuration.mode \
-            + '_%s-iteration'%experiment_configuration.iteration \
+            + experiment_configuration.get_description() \
             + '.mp4'
         
         output_filepaths.append(join(savedStreamsDir, output_file))
@@ -225,7 +235,7 @@ def initiateCapture(h, output_filepath):
     wireshark capture is used to obtain stats for throughput delay
     '''
 
-    output_filename_without_extension = output_filepath.split('/')[-1].split('.')[0]
+    output_filename_without_extension = get_filename_without_extension(output_filepath)
     interface_name = h.defaultIntf()
     
     command = 'bash %s %s %s %d %s'%(
