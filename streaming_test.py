@@ -223,15 +223,14 @@ def stream(src, dst, input_filename, output_filename, experiment_configuration):
     print 'Executing command on client %s <- %s'%(dst.name, src.name)
     client_command = get_dst_vlc_command(output_filename, local_stream_time, experiment_configuration)
     client_result = dst.sendCmd(client_command)
-    # print client_command
+    print client_command
     
     time.sleep(5)
-    print dst.IP()
-
+    
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
     server_command = get_src_vlc_command(input_filename, local_stream_time, dst.IP(), experiment_configuration)
     server_result = src.sendCmd(server_command)
-    # print server_command
+    print server_command
 
 def initiateCapture(h, output_filepath):
     '''
