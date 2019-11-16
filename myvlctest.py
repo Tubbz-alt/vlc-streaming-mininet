@@ -52,8 +52,8 @@ Maximum of 32 hosts , working for this topology (some RAM limitations , i guess)
 tested on a 4 GB Ubuntu 14.04 
 '''
 n = -1 # number of hosts
-bw = 1  # link bandwidth in mbps (all links have the same bandwidth)
-loss = 30
+bw = 10.0  # link bandwidth in mbps (all links have the same bandwidth)
+loss = 0
 qos = 1     # 1 -> if QoS needs to be applied | 0 -> no QoS
 
 '''
@@ -107,7 +107,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
     # src, dst are host objects obtained from net.get('<host>')
     print 'Executing command on client %s <- %s'%(dst.name, src.name)    
     client_command = 'cvlc rtp://@:5004 --sout \
-        "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
+        "#transcode{vcodec=VP80,vb=2000,acodec=vorb,ab=128,channels=2,samplerate=44100}:\
         std{access=file,mux=mp4,dst=%s}" \
         --run-time %d vlc://quit &'%(output_filename, local_stream_time)
     result2 = dst.sendCmd(client_command)
@@ -118,7 +118,7 @@ def stream(src, dst, input_filename, output_filename, dstIP):
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
     server_command = 'cvlc -vvv %s --sout \
-        "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
+        "#transcode{vcodec=VP80,vb=2000,acodec=vorb,ab=128,channels=2,samplerate=44100}:\
         duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
          --run-time %d vlc://quit'%(input_filename, dstIP, local_stream_time)
     result1 = src.sendCmd(server_command)
