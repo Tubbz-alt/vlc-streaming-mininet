@@ -97,7 +97,7 @@ class SimpleTopo(Topo):
             else:
                 self.addLink(h[i], s2)
 
-        self.addLink(s1, s2, bw=100, loss=0)
+        self.addLink(s1, s2, bw=10, loss=0)
 
 def stream(src, dst, input_filename, output_filename, dstIP):
     global stream_time
