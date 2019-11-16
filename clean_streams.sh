@@ -1,1 +1,1 @@
-rm $1/*.mp4
+rm savedStreams/*.mp4

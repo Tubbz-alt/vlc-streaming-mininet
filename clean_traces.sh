@@ -1,1 +1,1 @@
-rm $1/*.pcap
+rm capturedTraces/*.pcap
