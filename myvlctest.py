@@ -53,6 +53,7 @@ tested on a 4 GB Ubuntu 14.04
 '''
 n = -1 # number of hosts
 bw = 10.0  # link bandwidth in mbps (all links have the same bandwidth)
+loss = 0
 qos = 1     # 1 -> if QoS needs to be applied | 0 -> no QoS
 
 '''
@@ -93,11 +94,11 @@ class SimpleTopo(Topo):
         for i in range(n+1)[1:]:
             h.append(self.addHost('h{0}'.format(i)))
             if (i%2)==1:
-                self.addLink(h[i], s1)
+                self.addLink(h[i], s1, bw=bw)
             else:
-                self.addLink(h[i], s2)
+                self.addLink(h[i], s2, bw=bw)
 
-        self.addLink(s1, s2, bw=1, loss=0)
+        self.addLink(s1, s2, bw=bw, loss=loss)
 
 def stream(src, dst, input_filename, output_filename, dstIP):
     global stream_time
