@@ -130,7 +130,7 @@ def get_dst_vlc_command(output_filename, local_stream_time, experiment_configura
             return 'cvlc rtp://@:5004 --sout \
                 "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
                 std{access=file,mux=mp4,dst=%s}" \
-                --run-time %d vlc://quit 2> /tmp/stream-client-%s_errors.log 1> /tmp/stream-client-%s_output.log &'%(get_filename_without_extension(output_filename), local_stream_time)
+                --run-time %d vlc://quit 2> /tmp/stream-client-%s_errors.log 1> /tmp/stream-client-%s_output.log &'%(output_filename, local_stream_time, get_filename_without_extension(output_filename), get_filename_without_extension(output_filename))
         
         raise ValueError('> codec not recognized in get_dst_vlc_command! <')
     
@@ -142,7 +142,7 @@ def get_src_vlc_command(input_filename, local_stream_time, dstIP, experiment_con
             return 'cvlc -vvv %s --sout \
                 #transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
                 duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
-                --run-time %d vlc://quit 2> /tmp/stream-server-%s_errors.log 1> /tmp/stream-server-%s_output.log'%(experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename)), dstIP, local_stream_time)
+                --run-time %d vlc://quit 2> /tmp/stream-server-%s_errors.log 1> /tmp/stream-server-%s_output.log'%(input_filename, dstIP, local_stream_time, experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename)), experiment_configuration.get_description(preffix=get_filename_without_extension(input_filename)))
         
         raise ValueError('> codec not recognized in get_src_vlc_command! <')
     
