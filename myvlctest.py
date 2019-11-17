@@ -52,8 +52,8 @@ Maximum of 32 hosts , working for this topology (some RAM limitations , i guess)
 tested on a 4 GB Ubuntu 14.04 
 '''
 n = -1 # number of hosts
-bw = 1  # link bandwidth in mbps (all links have the same bandwidth)
-loss = 0
+bw = 10  # link bandwidth in mbps (all links have the same bandwidth)
+loss = 30
 qos = 1     # 1 -> if QoS needs to be applied | 0 -> no QoS
 
 '''
