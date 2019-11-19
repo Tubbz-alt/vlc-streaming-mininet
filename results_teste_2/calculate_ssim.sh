@@ -8,17 +8,15 @@ savedStreamsDir="savedStreams"
 
 tempFilePreffix="temp_"
 
-summaryFile="summary-stats.csv"
+summaryFile="summary-ssim.csv"
 
 
 
-echo "Cleaning $summaryFile..."
+echo "Preparing $summaryFile..."
+echo "saved_stream;ssim" > $summaryFile
 
-echo "" > $summaryFile
 
-
-echo "Removing previous SSIM temp files..."
-
+echo "Removing previous temp files..."
 rm $savedStreamsDir/$tempFilePreffix*
 
 
