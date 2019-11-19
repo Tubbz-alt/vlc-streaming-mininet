@@ -1,11 +1,15 @@
+#!/usr/bin/env bash
+
+## Config
 
 testVideosDir="../testVideos"
+
 savedStreamsDir="savedStreams"
-capturedTracesDir="capturedTraces"
 
 tempFilePreffix="temp_"
 
 summaryFile="summary-stats.csv"
+
 
 
 echo "Cleaning $summaryFile..."
@@ -49,9 +53,12 @@ for savedStream in $savedStreamsDir/*.mp4; do
   echo "Done! Parsing $tempStats..."
 
 
-  ssim=$(grep -i 'parsed_ssim' $tempStats | cut -f2 -d"M")
-  ssim=$(echo $ssim | xargs echo -n)
+  ssim=$(grep -i 'parsed_ssim' $tempStats | cut -f2 -d"M") # extract
+
+  ssim=$(echo $ssim | xargs echo -n) # trim
+
   echo "Done! SSIM: $ssim"
+
 
   echo "Appeding results to $summaryFile..."
 
