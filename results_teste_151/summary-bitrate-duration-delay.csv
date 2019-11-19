@@ -1,0 +1,3 @@
+captured_trace;bitrate;duration;packet_count;delay
+capturedTraces/360x240_2mb_1mb_link_h1_to_h2_qos_4hosts.pcap.pcapng;96;18.679161;267;69.95940449438202247191
+capturedTraces/720x480_5mb_1mb_link_h3_to_h4_qos_4hosts.pcap.pcapng;17;63.206113;142;445.11347183098591549295

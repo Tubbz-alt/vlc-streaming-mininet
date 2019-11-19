@@ -52,9 +52,11 @@ for trace in $capturedTracesDir/*.pcap*; do
   echo "tempTrace: $tempTrace"
 
 
-  echo "Filtering packets sent from ${ips[$src]} to ${ips[$dst]}..."
+  echo "Filtering TCP packets sent from ${ips[$src]} to ${ips[$dst]}..."
+  sudo tshark -r $trace -Y "((ip.addr eq ${ips[$src]} and ip.addr eq ${ips[$dst]}) and (tcp.port eq 8080))" -w $tempTrace
 
-  sudo tshark -r $trace -Y "((ip.addr eq ${ips[$src]} and ip.addr eq ${ips[$dst]}) and (udp.port eq $port))" -w $tempTrace
+#  echo "Filtering UDP packets sent from ${ips[$src]} to ${ips[$dst]}..."
+#  sudo tshark -r $trace -Y "((ip.addr eq ${ips[$src]} and ip.addr eq ${ips[$dst]}) and (udp.port eq $port))" -w $tempTrace
 
   echo "Parsing temp trace..."
 
