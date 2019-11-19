@@ -65,3 +65,7 @@ for savedStream in $savedStreamsDir/*.mp4; do
   echo "SSIM saved!"
 
 done
+
+echo "Removing temp files..."
+rm $savedStreamsDir/$tempFilePreffix*
+

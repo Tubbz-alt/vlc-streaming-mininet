@@ -33,49 +33,60 @@ for trace in $capturedTracesDir/*.pcap*; do
 
   echo "FOR $trace:"
 
-  srcToDst =$(echo $trace | grep -E -o 'h[1-4]_to_h[1-4]')
-  echo $srcToDst
+  srcToDst=$(echo $trace | grep -E -o 'h[1-4]_to_h[1-4]')
+#  echo $srcToDst
 
   src=$(echo $srcToDst | cut -f1 -d'_')
-  echo $src
+#  echo $src
 
   dst=$(echo $srcToDst | cut -f3 -d'_')
-  echo $dst  
+#  echo $dst  
 
-  # traceFilename=$(echo $trace | cut -f2 -d'/')
-  # echo "traceFilename: $traceFilename"
+  traceFilename=$(echo $trace | cut -f2 -d'/')
+#  echo "traceFilename: $traceFilename"
 
-  # traceFilenameNoExtension=$(echo $traceFilename | cut -f1 -d'.')
-  # echo "traceFilenameNoExtension: $traceFilenameNoExtension"
+  traceFilenameNoExtension=$(echo $traceFilename | cut -f1 -d'.')
+#  echo "traceFilenameNoExtension: $traceFilenameNoExtension"
 
-  # tempTrace="$tracesDir/$tempFilePreffix$traceFilenameNoExtension-filtered.pcap"
-  # echo "tempTrace: $tempTrace"
+  tempTrace="$capturedTracesDir/$tempFilePreffix$traceFilenameNoExtension-filtered.pcap"
+  echo "tempTrace: $tempTrace"
 
-  # echo "Creating temp trace from raw trace..."
 
-  # tshark -r $trace -Y "((ip.addr eq $ips[$src] and ip.addr eq $ips[$dst]) and (udp.port eq $port))" -w temp.pcap
+  echo "Filtering packets sent from ${ips[$src]} to ${ips[$dst]}..."
 
-  # echo "Parsing temp trace..."
+  sudo tshark -r $trace -Y "((ip.addr eq ${ips[$src]} and ip.addr eq ${ips[$dst]}) and (udp.port eq $port))" -w $tempTrace
 
-  # bitrate=$(capinfos -i temp.pcap | grep "Data bit rate" | grep -o -E "[0-9].+ " | cut -f1 -d' ')
-  # echo "bitrate: $bitrate"
-  
-  # duration=$(capinfos -u temp.pcap | grep "Capture duration" | grep -o -E "[0-9]+ " | cut -f1 -d' ')
-  # echo "duration: $duration"
+  echo "Parsing temp trace..."
 
-  # packetCount=$(capinfos -c temp.pcap | grep "Number of packets" | grep -o -E "[0-9]+ " | cut -f1 -d' ')
-  # echo "packetCount: $packetCount"
+  bitrateInKbps=$(capinfos -i $tempTrace | grep "Data bit rate" | grep -o -E "[0-9.,]+" | cut -f1 -d' ')
+#  echo $bitrateInKbps
+  bitrateInKbps=$(echo ${bitrateInKbps//,})
+  echo "bitrateInKbps: $bitrateInKbps"
 
-  # packetDelay=$(echo "$duration*1000/$packetCount" | bc -l)
-  # echo packetDelay: $packetDelay"
+  durationInSec=$(capinfos -u $tempTrace | grep "Capture duration" | grep -o -E "[0-9.,]+" | cut -f1 -d' ')
+#  echo $durationInSec
+  durationInSec=$(echo ${durationInSec//,})
+  echo "durationInSec: $durationInSec"
+
+  packetCount=$(capinfos -c $tempTrace | grep "Number of packets" | grep -o -E "[0-9,]+" | cut -f1 -d' ')
+#  echo $packetCount
+  packetCount=$(echo ${packetCount//,})
+  echo "packetCount: $packetCount"
+
+  packetDelayInSec=$(echo "$durationInSec*1000/$packetCount" | bc -l)
+  echo "packetDelayInSec: $packetDelayInSec"
 
   echo "Done!"
 
 
   echo "Appeding results to $summaryFile..."
 
-  echo "$trace;$bitrate;$duration;$packetCount;$packetDelay" >> $summaryFile
+  echo "$trace;$bitrateInKbps;$durationInSec;$packetCount;$packetDelayInSec" >> $summaryFile
 
   echo "Stats saved!"
 
 done
+
+echo "Removing temp files..."
+rm $capturedTracesDir/$tempFilePreffix*
+
