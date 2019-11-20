@@ -52,8 +52,8 @@ Maximum of 32 hosts , working for this topology (some RAM limitations , i guess)
 tested on a 4 GB Ubuntu 14.04 
 '''
 n = -1 # number of hosts
-bw = 1  # link bandwidth in mbps (all links have the same bandwidth)
-loss = 30
+bw = 10  # link bandwidth in mbps (all links have the same bandwidth)
+loss = 0
 qos = 1     # 1 -> if QoS needs to be applied | 0 -> no QoS
 
 '''
@@ -106,10 +106,10 @@ def stream(src, dst, input_filename, output_filename, dstIP):
 
     # src, dst are host objects obtained from net.get('<host>')
     print 'Executing command on client %s <- %s'%(dst.name, src.name)    
-    client_command = 'cvlc rtp://@:5004 --sout \
-        "#transcode{vcodec=VP80,vb=2000,acodec=vorb,ab=128,channels=2,samplerate=44100}:\
+    client_command = 'vlc-wrapper rtp://@:5004 --sout \
+        "#transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         std{access=file,mux=mp4,dst=%s}" \
-        --run-time %d vlc://quit &'%(output_filename, local_stream_time)
+        --run-time %d vlc://quit &> /tmp/stream-%s.log &'%(output_filename, local_stream_time, dst.name)
     result2 = dst.sendCmd(client_command)
     print client_command
     # result2 = dst.cmd('sleep 5')
@@ -117,14 +117,19 @@ def stream(src, dst, input_filename, output_filename, dstIP):
     time.sleep(5)
 
     print 'Executing command on server %s -> %s'%(src.name, dst.name)
-    server_command = 'cvlc -vvv %s --sout \
-        "#transcode{vcodec=VP80,vb=2000,acodec=vorb,ab=128,channels=2,samplerate=44100}:\
+    server_command = 'vlc-wrapper -vvv %s --sout \
+        "##transcode{vcodec=h264,acodec=mpga,ab=128,channels=2,samplerate=44100}:\
         duplicate{dst=rtp{dst=%s,port=5004,mux=ts}}"\
-         --run-time %d vlc://quit'%(input_filename, dstIP, local_stream_time)
+         --run-time %d vlc://quit &> /tmp/stream-%s.log &'%(input_filename, dstIP, local_stream_time, src.name)
     result1 = src.sendCmd(server_command)
     print server_command
 
     print result1
+
+    src.waitOutput() # new
+    dst.waitOutput() # new
+
+    print 'Video streaming complete from %s -> %s !!!'%(src.name, dst.name) # new
 
     return (src, dst)
 
@@ -233,11 +238,11 @@ def vlcStream(net):
         # threads.append(Thread(target=stream, args=(h[2*i-1],h[2*i], inFile, outFile, '10.0.0.%d'%(2*i), threadIdx,)))
         serv_cli_pairs.append(stream(h[2*i-1],h[2*i], inFile, outFile, '10.0.0.%d'%(2*i)))
 
-    ''' waiting for video flows to complete '''
-    for src,dst in serv_cli_pairs:
-        src.waitOutput()
-        dst.waitOutput()
-        print 'Video streaming complete from %s -> %s !!!'%(src.name, dst.name)
+    ''' waiting for video flows to complete ''' # parallel
+#    for src,dst in serv_cli_pairs:
+#        src.waitOutput()
+#        dst.waitOutput()
+#        print 'Video streaming complete from %s -> %s !!!'%(src.name, dst.name)
 
 
 
